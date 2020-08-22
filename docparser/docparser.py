@@ -53,10 +53,18 @@ def main(aws_toolkit_source="../awstoolkitsource", aws_toolkit_docs="../awstoolk
         ------
     """
     get_logger()
-    for devops_task in os.listdir(aws_toolkit_source + "/Tasks"):
+    for devops_task in os.listdir(os.path.join(aws_toolkit_source, "Tasks")):
         logging.info(devops_task)
-        print(devops_task)
-        # with open 
+
+        try:
+            with open(os.path.join(aws_toolkit_source,"Tasks", devops_task, 
+                "task.json"), "r") as devops_task:            
+                devops_task_definition = json.load(devops_task)
+                print(devops_task_definition["name"]) 
+
+        except FileNotFoundError:
+            logging.exception("main - task.json not found")
+            
     
 
 if __name__ == "__main__":
