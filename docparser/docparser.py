@@ -1,4 +1,5 @@
 from datetime import datetime
+from fuzzywuzzy import process
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
@@ -58,7 +59,19 @@ def get_matching_doc(aws_toolkit_docs, task_folder_name):
         Raises
         ------
     """
-    pass
+    all_markdown_files = os.listdir(aws_toolkit_docs)
+
+    '''
+        tuple with ("lambda-invoke.md", 65)
+    '''
+    markdown_file_name = process.extractOne(task_folder_name, all_markdown_files)
+    logging.info(
+        "get_matching_doc - match " + task_folder_name + " to " +
+         str(markdown_file_name)
+    )
+
+    return(markdown_file_name[0])
+    import pdb; pdb.set_trace()
 
 def main(aws_toolkit_source="../awstoolkitsource/Tasks", 
     aws_toolkit_docs="../awstoolkitdocs/doc_source"):
