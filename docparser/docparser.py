@@ -33,8 +33,10 @@ def get_logger():
          )
     logging.info("\n")
 
-def task_definition_to_md(aws_toolkit_docs, devops_task_definition):
-    """Main entry point into script
+
+
+def get_matching_doc(aws_toolkit_docs, task_folder_name):
+    """Returns the matching documentation file
 
         Parameters
         ----------
@@ -42,28 +44,34 @@ def task_definition_to_md(aws_toolkit_docs, devops_task_definition):
             path to aws toolkit docs code. Defaults ../awstoolkitdocs
             https://github.com/awsdocs/aws-tools-ado-vsts-user-guide
         
-        devops_task_definition : dict
-            dict passed as a task definition in devops
+        task_folder_name : str
+            name of the aws toolkit task folder
 
         Returns
         -------
+        markdown_file_name : str
+            name of markdown file selected
+        
+        markdown_content : str
+            content of the markdown file
 
         Raises
         ------
     """
+    pass
 
-
-def main(aws_toolkit_source="../awstoolkitsource", aws_toolkit_docs="../awstoolkitdocs"):
+def main(aws_toolkit_source="../awstoolkitsource/Tasks", 
+    aws_toolkit_docs="../awstoolkitdocs/doc_source"):
     """Main entry point into script
 
         Parameters
         ----------
         aws_toolkit_source : str
-            path to aws toolkit source code. Defaults ../awstoolkitsource
+            path to aws toolkit source code. Defaults ../awstoolkitsource/Tasks
             https://github.com/aws/aws-toolkit-azure-devops
 
         aws_toolkit_docs : str
-            path to aws toolkit docs code. Defaults ../awstoolkitdocs
+            path to aws toolkit docs code. Defaults ../awstoolkitdocs/doc_source
             https://github.com/awsdocs/aws-tools-ado-vsts-user-guide
 
         Returns
@@ -73,14 +81,14 @@ def main(aws_toolkit_source="../awstoolkitsource", aws_toolkit_docs="../awstoolk
         ------
     """
     get_logger()
-    for devops_task in os.listdir(os.path.join(aws_toolkit_source, "Tasks")):
+    for devops_task in os.listdir(aws_toolkit_source):
         logging.info(devops_task)
 
         try:
-            with open(os.path.join(aws_toolkit_source,"Tasks", devops_task, 
+            with open(os.path.join(aws_toolkit_source, devops_task, 
                 "task.json"), "r") as devops_task:            
                 devops_task_definition = json.load(devops_task)
-                task_definition_to_md(
+                get_matching_doc(
                     aws_toolkit_docs=aws_toolkit_docs,
                     devops_task_definition=devops_task_definition
                 )

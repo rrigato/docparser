@@ -24,6 +24,10 @@ class UnitTests(unittest.TestCase):
             Raises
             ------
         """
+        from docparser.docparser import get_matching_doc
+        listdir_mock.return_value = ["not"]
+        get_matching_doc(aws_toolkit_docs="fakepath", 
+            task_folder_name="LambdaInvokeFunction")
 
     @unittest.skip("Skip until patch system io")
     @patch("docparser.docparser.get_logger")
