@@ -8,10 +8,10 @@ import unittest
 
 
 class UnitTests(unittest.TestCase):
-    
+
     @patch("builtins.open")
     @patch("os.listdir")
-    def test_get_matching_doc(self, listdir_mock, open_patch):
+    def test_get_matching_doc(self, listdir_mock, open_mock):
         """Validates matching logic between task folder and documentation
             markdown name
 
@@ -20,7 +20,7 @@ class UnitTests(unittest.TestCase):
             listdir_mock : unittest.mock.MagicMock
                 Mock object to get list of markdown name
 
-            open_patch : unittest.mock.MagicMock
+            open_mock : unittest.mock.MagicMock
                 Mock object for open reading of markdown file
 
             Returns
@@ -40,11 +40,15 @@ class UnitTests(unittest.TestCase):
             aws_toolkit_docs=mock_path, 
             task_folder_name="LambdaInvokeFunction"
         )
-        listdir_mock.assertCalledOnceWith(
+        listdir_mock.assert_called_once_with(
             mock_path
         )
 
         self.assertEqual(markdown_file_name, "lambda-invoke.md")
+
+        open_mock.assert_called_once_with(
+            os.path.join(mock_path, "lambda-invoke.md"), "r"
+        )
 
 
     @unittest.skip("Skip until patch system io")

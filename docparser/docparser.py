@@ -69,9 +69,15 @@ def get_matching_doc(aws_toolkit_docs, task_folder_name):
         "get_matching_doc - match " + task_folder_name + " to " +
          str(markdown_file_name)
     )
+    
+    with open(os.path.join(aws_toolkit_docs, markdown_file_name[0]), "r") as md_file:
+        markdown_content = md_file.read()
+    
+    logging.info("get_matching_doc - read markdown content")
 
-    return(markdown_file_name[0])
-    import pdb; pdb.set_trace()
+    return(markdown_file_name[0], markdown_content)
+
+    
 
 def main(aws_toolkit_source="../awstoolkitsource/Tasks", 
     aws_toolkit_docs="../awstoolkitdocs/doc_source"):
