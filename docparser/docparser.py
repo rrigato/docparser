@@ -33,6 +33,26 @@ def get_logger():
          )
     logging.info("\n")
 
+def task_definition_to_md(aws_toolkit_docs, devops_task_definition):
+    """Main entry point into script
+
+        Parameters
+        ----------
+        aws_toolkit_docs : str
+            path to aws toolkit docs code. Defaults ../awstoolkitdocs
+            https://github.com/awsdocs/aws-tools-ado-vsts-user-guide
+        
+        devops_task_definition : dict
+            dict passed as a task definition in devops
+
+        Returns
+        -------
+
+        Raises
+        ------
+    """
+
+
 def main(aws_toolkit_source="../awstoolkitsource", aws_toolkit_docs="../awstoolkitdocs"):
     """Main entry point into script
 
@@ -60,7 +80,10 @@ def main(aws_toolkit_source="../awstoolkitsource", aws_toolkit_docs="../awstoolk
             with open(os.path.join(aws_toolkit_source,"Tasks", devops_task, 
                 "task.json"), "r") as devops_task:            
                 devops_task_definition = json.load(devops_task)
-                print(devops_task_definition["name"]) 
+                task_definition_to_md(
+                    aws_toolkit_docs=aws_toolkit_docs,
+                    devops_task_definition=devops_task_definition
+                )
 
         except FileNotFoundError:
             logging.exception("main - task.json not found")
