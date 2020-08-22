@@ -10,7 +10,7 @@ import unittest
 class UnitTests(unittest.TestCase):
 
     
-    @patch("logging.getLogger")
+    @patch("docparser.docparser.get_logger")
     def test_main(self, getLogger_mock):
         """Test for main function
 
@@ -26,3 +26,5 @@ class UnitTests(unittest.TestCase):
             ------
         """
         from docparser.docparser import main
+        main()
+        get_logger_mock.assertCalledOnceWith()
