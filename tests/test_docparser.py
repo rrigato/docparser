@@ -87,14 +87,14 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(parameters_start_line, 13)
 
 
-    @patch("docparser.docparser.get_doc_line_locations")
+
     @patch("json.load")
     @patch("docparser.docparser.get_matching_doc")
     @patch("builtins.open")
     @patch("os.listdir")
     @patch("docparser.docparser.get_logger")
     def test_main(self, get_logger_mock, listdir_mock, open_mock,
-        get_matching_doc_mock, json_load_mock, get_doc_line_locations_mock):
+        get_matching_doc_mock, json_load_mock):
         """Test for main function
 
             Parameters

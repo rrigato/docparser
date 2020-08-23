@@ -151,6 +151,7 @@ def main(aws_toolkit_source="../awstoolkitsource/Tasks",
                     task_folder_name=devops_task_folder
                 )
 
+
                 yaml_start_line, parameters_start_line = get_doc_line_locations(
                     markdown_content=markdown_content
                 )
