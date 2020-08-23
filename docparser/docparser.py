@@ -116,6 +116,12 @@ def get_doc_line_locations(markdown_content):
 
         line_counter += 1
 
+    logging.info(
+        "get_doc_line_locations - yaml_start_line " + 
+        str(yaml_start_line) + " parameters_start_line " 
+        + str(parameters_start_line)
+    )
+    
     return(yaml_start_line, parameters_start_line)
 
 def main(aws_toolkit_source="../awstoolkitsource/Tasks", 
