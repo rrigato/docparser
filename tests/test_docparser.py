@@ -87,13 +87,14 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(parameters_start_line, 13)
 
 
+    @patch("docparser.docparser.get_doc_line_locations")
     @patch("json.load")
     @patch("docparser.docparser.get_matching_doc")
     @patch("builtins.open")
     @patch("os.listdir")
     @patch("docparser.docparser.get_logger")
     def test_main(self, get_logger_mock, listdir_mock, open_mock,
-        get_matching_doc_mock, json_load_mock):
+        get_matching_doc_mock, json_load_mock, get_doc_line_locations_mock):
         """Test for main function
 
             Parameters
@@ -120,6 +121,7 @@ class UnitTests(unittest.TestCase):
         mock_source_code_location = "../mock_source"
         mock_docs_location = "../mock_docs"
 
+        get_matching_doc_mock.return_value = ["s3-upload.md", self.s3_task_upload_doc]
 
 
         listdir_mock.return_value = self.devops_task_list
@@ -134,5 +136,3 @@ class UnitTests(unittest.TestCase):
 
 
         self.assertEqual(get_matching_doc_mock.call_count, len(self.devops_task_list))
-
-        
