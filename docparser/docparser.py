@@ -1,14 +1,9 @@
 from datetime import datetime
 from fuzzywuzzy import process
-from unittest.mock import MagicMock
-from unittest.mock import patch
 
 import json
 import logging
 import os
-
-import unittest
-
 
 def get_logger():
     """Returns a logger
@@ -77,7 +72,28 @@ def get_matching_doc(aws_toolkit_docs, task_folder_name):
 
     return(markdown_file_name[0], markdown_content)
 
-    
+
+def get_doc_line_locations():
+    """Gets the doc string line locations for inserting new documentation
+
+        Parameters
+        ----------
+        markdown_content : str
+            content of the markdown file
+
+        Returns
+        -------
+        yaml_start_line : str
+            Where to begin inserting data type information for the
+            azure pipelines yaml
+        
+        parameters_start_line : str
+            where the parameters section begins in the markdown task definition
+
+        Raises
+        ------
+    """
+    pass
 
 def main(aws_toolkit_source="../awstoolkitsource/Tasks", 
     aws_toolkit_docs="../awstoolkitdocs/doc_source"):
@@ -107,7 +123,7 @@ def main(aws_toolkit_source="../awstoolkitsource/Tasks",
             with open(os.path.join(aws_toolkit_source, devops_task_folder, 
                 "task.json"), "r") as devops_task:            
                 devops_task_definition = json.load(devops_task)
-                get_matching_doc(
+                markdown_file_name, markdown_content = get_matching_doc(
                     aws_toolkit_docs=aws_toolkit_docs,
                     task_folder_name=devops_task_folder
                 )

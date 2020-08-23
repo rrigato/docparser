@@ -60,6 +60,24 @@ class UnitTests(unittest.TestCase):
         )
 
 
+
+    def test_get_doc_line_locations(self):
+        """Validates the lines returned from markdown string
+
+            Parameters
+            ----------
+
+            Returns
+            -------
+
+            Raises
+            ------
+        """
+        from docparser.docparser import get_doc_line_locations
+
+        yaml_start_line, parameters_start_line = get_doc_line_locations(markdown_content="")
+
+
     @patch("json.load")
     @patch("docparser.docparser.get_matching_doc")
     @patch("builtins.open")
