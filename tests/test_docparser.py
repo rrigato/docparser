@@ -60,12 +60,13 @@ class UnitTests(unittest.TestCase):
         )
 
 
+    @patch("json.load")
     @patch("docparser.docparser.get_matching_doc")
     @patch("builtins.open")
     @patch("os.listdir")
     @patch("docparser.docparser.get_logger")
     def test_main(self, get_logger_mock, listdir_mock, open_mock,
-        get_matching_doc_mock):
+        get_matching_doc_mock, json_load_mock):
         """Test for main function
 
             Parameters
@@ -93,11 +94,18 @@ class UnitTests(unittest.TestCase):
         mock_docs_location = "../mock_docs"
 
 
+
         listdir_mock.return_value = self.devops_task_list
 
-        open_mock.return_value = self.mock_s3_task_definition
+        json_load_mock.return_value = self.mock_s3_task_definition
 
         main(aws_toolkit_source=mock_source_code_location, aws_toolkit_docs=mock_docs_location)
         get_logger_mock.assert_called_once_with()
 
         self.assertEqual(open_mock.call_count, len(self.devops_task_list))
+        self.assertEqual(json_load_mock.call_count, len(self.devops_task_list))
+
+
+        self.assertEqual(get_matching_doc_mock.call_count, len(self.devops_task_list))
+
+        
