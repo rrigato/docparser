@@ -9,6 +9,11 @@ import unittest
 
 class UnitTests(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.markdown_files_list = ["cloudformation-execute-changeset.md", "welcome.md", "task-reference.md", "ecr-pushimage.md", "security.md", "setting-up.md", "disaster-recovery-resiliency.md", "index.md", "send-message.md", "security-iam.md", "getting-started.md", "elastic-beanstalk-createversion.md", "awspowershell-module-script.md", "cloudformation-create-update.md", "secretsmanager-create-update.md", "tutorial-s3.md", "lambda-netcore-deploy.md", "systemsmanager-setparameter.md", "document-history.md", "codedeploy-deployment.md", "data-protection.md", "secretsmanager-getsecret.md", "compliance-validation.md", "elastic-beanstalk-deploy.md", "awsshell.md", "systemsmanager-runcommand.md", "lambda-deploy.md", "tutorial-eb.md", "s3-download.md", "s3-upload.md", "aws-cli.md", "lambda-invoke.md", "cloudformation-delete-stack.md", "systemsmanager-getparameter.md", "tutorials.md", "infrastructure-security.md"]
+        cls.devops_task_list = ["Common", "CloudFormationExecuteChangeSet", "SystemsManagerRunCommand", "AWSCLI", "BeanstalkCreateApplicationVersion", "AWSPowerShellModuleScript", "SecretsManagerGetSecret", "ECRPushImage", "S3Download", "SystemsManagerSetParameter", "S3Upload", "CodeDeployDeployApplication", "CloudFormationCreateOrUpdateStack", "ECRPullImage", "BeanstalkDeployApplication", "SystemsManagerGetParameter", "AWSShellScript", "CloudFormationDeleteStack", "LambdaDeployFunction", "LambdaInvokeFunction", "SecretsManagerCreateOrUpdateSecret", "SendMessage", "LambdaNETCoreDeploy"]
+
     @patch("builtins.open")
     @patch("os.listdir")
     def test_get_matching_doc(self, listdir_mock, open_mock):
@@ -33,7 +38,7 @@ class UnitTests(unittest.TestCase):
         '''
             Use an example of markdown files to validate the correct file is selected
         '''
-        listdir_mock.return_value = ["cloudformation-execute-changeset.md", "welcome.md", "task-reference.md", "ecr-pushimage.md", "security.md", "setting-up.md", "disaster-recovery-resiliency.md", "index.md", "send-message.md", "security-iam.md", "getting-started.md", "elastic-beanstalk-createversion.md", "awspowershell-module-script.md", "cloudformation-create-update.md", "secretsmanager-create-update.md", "tutorial-s3.md", "lambda-netcore-deploy.md", "systemsmanager-setparameter.md", "document-history.md", "codedeploy-deployment.md", "data-protection.md", "secretsmanager-getsecret.md", "compliance-validation.md", "elastic-beanstalk-deploy.md", "awsshell.md", "systemsmanager-runcommand.md", "lambda-deploy.md", "tutorial-eb.md", "s3-download.md", "s3-upload.md", "aws-cli.md", "lambda-invoke.md", "cloudformation-delete-stack.md", "systemsmanager-getparameter.md", "tutorials.md", "infrastructure-security.md"]
+        listdir_mock.return_value = self.markdown_files_list
         
         mock_path = "fakepath"
         markdown_file_name, markdown_body = get_matching_doc(
@@ -51,15 +56,23 @@ class UnitTests(unittest.TestCase):
         )
 
 
-    @unittest.skip("Skip until patch system io")
+
+    @patch("builtins.open")
+    @patch("os.listdir")
     @patch("docparser.docparser.get_logger")
-    def test_main(self, getLogger_mock):
+    def test_main(self, getLogger_mock, listdir_mock, open_mock):
         """Test for main function
 
             Parameters
             ----------
             getLogger_mock : unittest.mock.MagicMock
                 Mock object used to patch get_logger for lambda handler
+
+            listdir_mock : unittest.mock.MagicMock
+                Mock object to get list of markdown name
+
+            open_mock : unittest.mock.MagicMock
+                Mock object for open reading of markdown file
 
             Returns
             -------
@@ -68,5 +81,12 @@ class UnitTests(unittest.TestCase):
             ------
         """
         from docparser.docparser import main
-        main()
+        mock_source_code_location = "../mock_source"
+        mock_docs_location = "../mock_docs"
+        main(aws_toolkit_source=mock_source_code_location, aws_toolkit_docs=mock_docs_location)
         get_logger_mock.assertCalledOnceWith()
+
+
+        listdir_mock.return_value = self.devops_task_list
+
+        self.assertEqual(open_mock.call_count, len(self.devops_task_list))
