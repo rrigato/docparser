@@ -73,7 +73,7 @@ def get_matching_doc(aws_toolkit_docs, task_folder_name):
     return(markdown_file_name[0], markdown_content)
 
 
-def get_doc_line_locations():
+def get_doc_line_locations(markdown_content):
     """Gets the doc string line locations for inserting new documentation
 
         Parameters
@@ -93,7 +93,30 @@ def get_doc_line_locations():
         Raises
         ------
     """
-    pass
+    line_counter = 0
+    yaml_start_line = None
+    parameters_start_line = None
+
+    for markdown_file_line in markdown_content.splitlines():
+
+        '''
+            want to start before this Description markdown section        
+            ## Description<a name="description"></a>
+
+        '''
+        if markdown_file_line.lower().startswith("## description<a"):
+            yaml_start_line = line_counter - 1
+
+        '''
+            parameters section begins after this markdown header
+            ## Parameters<a name="parameters"></a>
+        '''
+        if markdown_file_line.lower().startswith("## parameters<a"):
+            parameters_start_line = line_counter + 1
+
+        line_counter += 1
+
+    return(yaml_start_line, parameters_start_line)
 
 def main(aws_toolkit_source="../awstoolkitsource/Tasks", 
     aws_toolkit_docs="../awstoolkitdocs/doc_source"):
