@@ -16,11 +16,11 @@ class UnitTests(unittest.TestCase):
         cls.devops_task_list = ["Common", "CloudFormationExecuteChangeSet", "SystemsManagerRunCommand", "AWSCLI", "BeanstalkCreateApplicationVersion", "AWSPowerShellModuleScript", "SecretsManagerGetSecret", "ECRPushImage", "S3Download", "SystemsManagerSetParameter", "S3Upload", "CodeDeployDeployApplication", "CloudFormationCreateOrUpdateStack", "ECRPullImage", "BeanstalkDeployApplication", "SystemsManagerGetParameter", "AWSShellScript", "CloudFormationDeleteStack", "LambdaDeployFunction", "LambdaInvokeFunction", "SecretsManagerCreateOrUpdateSecret", "SendMessage", "LambdaNETCoreDeploy"]
 
         with open("tests/tasks/s3upload.json") as s3_upload_task:
-            cls.mock_s3_task_definition = json.load(s3_upload_task)
+            cls.s3_task_definition = json.load(s3_upload_task)
 
 
         with open("tests/tasks/s3-upload.md") as s3_upload_doc:
-            cls.mock_s3_task_upload_doc = s3_upload_doc.read()
+            cls.s3_task_upload_doc = s3_upload_doc.read()
 
     @patch("builtins.open")
     @patch("os.listdir")
@@ -78,7 +78,13 @@ class UnitTests(unittest.TestCase):
         """
         from docparser.docparser import get_doc_line_locations
 
-        yaml_start_line, parameters_start_line = get_doc_line_locations(markdown_content="")
+        yaml_start_line, parameters_start_line = get_doc_line_locations(
+            markdown_content=self.s3_task_upload_doc
+        )
+
+        self.assertEqual(yaml_start_line, 5)
+
+        self.assertEqual(parameters_start_line, 13)
 
 
     @patch("json.load")
@@ -118,7 +124,7 @@ class UnitTests(unittest.TestCase):
 
         listdir_mock.return_value = self.devops_task_list
 
-        json_load_mock.return_value = self.mock_s3_task_definition
+        json_load_mock.return_value = self.s3_task_definition
 
         main(aws_toolkit_source=mock_source_code_location, aws_toolkit_docs=mock_docs_location)
         get_logger_mock.assert_called_once_with()
