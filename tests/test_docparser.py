@@ -18,6 +18,10 @@ class UnitTests(unittest.TestCase):
         with open("tests/tasks/s3upload.json") as s3_upload_task:
             cls.mock_s3_task_definition = json.load(s3_upload_task)
 
+
+        with open("tests/tasks/s3-upload.md") as s3_upload_doc:
+            cls.mock_s3_task_upload_doc = s3_upload_doc.read()
+
     @patch("builtins.open")
     @patch("os.listdir")
     def test_get_matching_doc(self, listdir_mock, open_mock):
@@ -58,7 +62,6 @@ class UnitTests(unittest.TestCase):
         open_mock.assert_called_once_with(
             os.path.join(mock_path, "lambda-invoke.md"), "r"
         )
-
 
 
     def test_get_doc_line_locations(self):
